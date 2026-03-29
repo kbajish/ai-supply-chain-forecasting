@@ -1,0 +1,22 @@
+# Data and models
+/data/
+/models/
+/mlruns/
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+dist/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
