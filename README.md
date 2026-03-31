@@ -7,6 +7,8 @@
 
 An AI-driven supply chain intelligence system that combines LSTM-based demand forecasting with XGBoost supply risk scoring, built on synthetic industrial data modelled around automotive and manufacturing scenarios relevant to the German market. The system forecasts 28-day product demand per SKU, scores supplier risk with SHAP explanations, generates inventory reorder recommendations, and produces planner-ready LLM narratives via LangChain + Ollama.
 
+The LSTM model is additionally benchmarked on the M5 Forecasting dataset (Walmart CA subset, 200 products) — see `notebooks/02_m5_forecasting.ipynb`.
+
 ---
 
 ## 🚀 Key Features
@@ -17,6 +19,7 @@ An AI-driven supply chain intelligence system that combines LSTM-based demand fo
 - 📦 Inventory reorder recommendations — forecast vs safety stock alerts
 - 🤖 LLM-powered planner insights using LangChain + Ollama (local, no API key)
 - 📉 MLflow experiment tracking for both LSTM and XGBoost model tracks
+- 📊 M5 benchmark notebook — LSTM evaluated on real Walmart retail data (CA subset)
 - ⚡ FastAPI backend (`/forecast`, `/risk`, `/insights`, `/health`)
 - 📊 Streamlit dashboard — forecast chart, risk heatmap, LLM insights panel
 - 🐳 Docker Compose for full-stack deployment
@@ -59,6 +62,21 @@ LangChain + Ollama synthesises forecast data, risk alerts, and reorder recommend
 
 ---
 
+## 📊 M5 Benchmark
+
+The LSTM architecture is additionally evaluated on the M5 Forecasting dataset — a Kaggle competition benchmark using real Walmart daily sales data across 3,049 products and 10 stores. The notebook uses a California subset (200 products, 180 days) to demonstrate model performance on real-world retail demand patterns.
+
+| Model | Dataset | MAE | RMSE | Scale |
+|---|---|---|---|---|
+| LSTM | Synthetic industrial | 23.83 | 36.70 | Raw units |
+| LSTM | M5 CA subset | 1.22 | 2.36 | Normalised |
+
+See `notebooks/02_m5_forecasting.ipynb` for full training code, comparison, and forecast chart.
+
+**Next steps with M5:** Adding calendar features (SNAP purchase days, sporting events, holidays) would significantly improve spike prediction — the natural extension of the current benchmark.
+
+---
+
 ## 📊 Dashboard Overview
 
 The Streamlit dashboard provides:
@@ -77,7 +95,7 @@ The Streamlit dashboard provides:
 |---|---|
 | Demand forecasting | LSTM (PyTorch) |
 | Risk scoring | XGBoost + SHAP |
-| Data | Synthetic industrial supply chain |
+| Data | Synthetic industrial supply chain + M5 benchmark |
 | LLM insights | LangChain + Ollama (llama3.2, local) |
 | Experiment tracking | MLflow |
 | Backend | FastAPI, Uvicorn |
@@ -96,8 +114,16 @@ ai-supply-chain-forecasting/
 ├── data/                          # Generated data (not committed)
 │   ├── demand/
 │   │   └── demand_data.csv        # 50 SKUs × 730 days
-│   └── risk/
-│       └── supplier_risk.csv      # 100 supplier risk records
+│   ├── risk/
+│   │   └── supplier_risk.csv      # 100 supplier risk records
+│   └── m5/                        # M5 Kaggle dataset (not committed)
+│       ├── sales_train_evaluation.csv
+│       └── calendar.csv
+│
+├── notebooks/
+│   ├── 01_exploration.ipynb
+│   ├── 02_m5_forecasting.ipynb    # M5 benchmark — LSTM on Walmart CA data
+│   └── m5_forecast_chart.png      # Forecast vs actual chart
 │
 ├── src/
 │   ├── data/
@@ -114,6 +140,8 @@ ai-supply-chain-forecasting/
 │       └── insight_chain.py       # LangChain + Ollama insights
 │
 ├── models/                        # Saved model artifacts (not committed)
+│   ├── lstm_demand.pt             # Trained on synthetic data
+│   └── lstm_m5_ca.pt              # Trained on M5 CA subset
 │
 ├── api/
 │   └── main.py                    # FastAPI app
@@ -179,6 +207,9 @@ docker compose up --build
 | Dashboard | http://localhost:8501      |
 | MLflow    | http://localhost:5000      |
 
+### 6. Run M5 benchmark notebook (optional)
+Download M5 data from [Kaggle](https://www.kaggle.com/competitions/m5-forecasting-accuracy) and place CSVs in `data/m5/`, then open `notebooks/02_m5_forecasting.ipynb`.
+
 ---
 
 ## 🧪 API Endpoints
@@ -194,7 +225,7 @@ docker compose up --build
 
 ## 📈 Future Improvements
 
-- M5 Forecasting dataset integration (Walmart retail benchmark)
+- M5 full dataset integration with calendar features (SNAP days, sporting events, holidays)
 - Kafka real-time streaming for live demand signals
 - Transformer-based forecasting (Temporal Fusion Transformer)
 - Multi-echelon inventory optimisation
