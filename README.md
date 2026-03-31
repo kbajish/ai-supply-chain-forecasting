@@ -9,6 +9,8 @@ An AI-driven supply chain intelligence system that combines LSTM-based demand fo
 
 The LSTM model is additionally benchmarked on the M5 Forecasting dataset (Walmart CA subset, 200 products) — see `notebooks/02_m5_forecasting.ipynb`.
 
+This project demonstrates the architecture and MLOps patterns of an industrial supply chain AI system. It is intended as a reference implementation and learning resource, not a deployment-ready system.
+
 ---
 
 ## 🚀 Key Features
@@ -21,7 +23,7 @@ The LSTM model is additionally benchmarked on the M5 Forecasting dataset (Walmar
 - 📉 MLflow experiment tracking for both LSTM and XGBoost model tracks
 - 📊 M5 benchmark notebook — LSTM evaluated on real Walmart retail data (CA subset)
 - ⚡ FastAPI backend (`/forecast`, `/risk`, `/insights`, `/health`)
-- 📊 Streamlit dashboard — forecast chart, risk heatmap, LLM insights panel
+- 📊 Streamlit dashboard — forecast chart, risk scores, LLM insights panel
 - 🐳 Docker Compose for full-stack deployment
 - 🔄 GitHub Actions CI/CD with model and import tests
 
@@ -58,7 +60,7 @@ Synthetic industrial supply chain data is generated for 50 automotive SKUs (brak
 
 An LSTM network trained on the demand time series forecasts the next 28 days per SKU with upper and lower prediction intervals. A separate XGBoost classifier scores each supplier as Low, Medium, or High risk, with SHAP values explaining the top contributing risk factors. Inventory reorder alerts are triggered when the forecasted demand exceeds current stock minus a safety buffer.
 
-LangChain + Ollama synthesises forecast data, risk alerts, and reorder recommendations into plain-English planner narratives. All results are served via FastAPI and visualised in a Streamlit dashboard with an interactive forecast chart, supplier risk heatmap, and LLM insights panel.
+LangChain + Ollama synthesises forecast data, risk alerts, and reorder recommendations into plain-English planner narratives. All results are served via FastAPI and visualised in a Streamlit dashboard with an interactive forecast chart, supplier risk scores, and LLM insights panel.
 
 ---
 
@@ -82,7 +84,7 @@ See `notebooks/02_m5_forecasting.ipynb` for full training code, comparison, and 
 The Streamlit dashboard provides:
 
 - 📈 Interactive demand forecast chart with prediction intervals
-- ⚠️ Supplier risk heatmap — colour-coded Low / Medium / High
+- ⚠️ Supplier risk scores — colour-coded Low / Medium / High
 - 📦 Reorder alert table — SKUs requiring immediate action
 - 🤖 LLM-generated planner insight narrative
 - 📉 MLflow experiment metrics summary
@@ -223,7 +225,7 @@ Download M5 data from [Kaggle](https://www.kaggle.com/competitions/m5-forecastin
 
 ---
 
-## 📈 Future Improvements
+## 📈 Possible Extensions
 
 - M5 full dataset integration with calendar features (SNAP days, sporting events, holidays)
 - Kafka real-time streaming for live demand signals
@@ -235,4 +237,4 @@ Download M5 data from [Kaggle](https://www.kaggle.com/competitions/m5-forecastin
 
 ## 👤 Author
 
-Experienced IT professional with a background in development, cybersecurity, and ERP systems, with expertise in Industrial AI. Focused on building production-ready AI systems with explainability, LLM integration, and MLOps best practices.
+Experienced IT professional with a background in development, cybersecurity, and ERP systems, with expertise in Industrial AI. Focused on building well-engineered AI systems with explainability, LLM integration, and MLOps practices.
